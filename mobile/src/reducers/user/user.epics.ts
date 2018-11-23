@@ -1,7 +1,16 @@
 import { deserialize } from 'santee-dcts/src/deserializer';
 import { ActionsObservable } from 'redux-observable';
 import { User } from './user.model';
-import { LoadUser, loadUserFinished, LoadUserFinished, loadUserEmployeeFinished, LoadUserEmployeeFinished, LoadUserEmployeePermissions, loadUserEmployeePermissionsFinished } from './user.action';
+import {
+    LoadUser,
+    loadUserFinished,
+    LoadUserFinished,
+    loadUserEmployeeFinished,
+    LoadUserEmployeeFinished,
+    LoadUserEmployeePermissions,
+    loadUserEmployeePermissionsFinished,
+    LoadUserPreferences, loadUserPreferencesFinished, UpdateUserPreferences
+} from './user.action';
 import { Observable } from 'rxjs/Observable';
 import { loadFailedError } from '../errors/errors.action';
 import { AppState } from 'react-native';
@@ -10,6 +19,7 @@ import { Employee } from '../organization/employee.model';
 import { handleHttpErrors } from '../errors/errors.epics';
 import { startLogoutProcess } from '../auth/auth.action';
 import { UserEmployeePermissions } from './user-employee-permissions.model';
+import { UserPreferences } from './user-preferences.model';
 
 export const loadUserEpic$ = (action$: ActionsObservable<LoadUser>, appState: AppState, deps: DependenciesContainer) =>
     action$.ofType('LOAD-USER')
@@ -33,3 +43,21 @@ export const loadUserEmployeePermissionsEpic$ = (action$: ActionsObservable<Load
             .pipe(handleHttpErrors(false)))
         .map(obj => deserialize(obj, UserEmployeePermissions))
         .map(x => loadUserEmployeePermissionsFinished(x));
+
+export const loadUserPreferencesEpic$ = (action$: ActionsObservable<LoadUserPreferences>, appState: AppState, deps: DependenciesContainer) =>
+    action$.ofType('LOAD-USER-PREFERENCES')
+        .switchMap(x => deps.apiClient.getJSON(`/user-preferences/${x.userId}`)
+            .pipe(handleHttpErrors(false)))
+        .map(obj => deserialize(obj, UserPreferences))
+        .map(x => loadUserPreferencesFinished(x));
+
+export const updateUserPreferencesEpic$ = (action$: ActionsObservable<UpdateUserPreferences>, appState: AppState, deps: DependenciesContainer) =>
+    action$.ofType('UPDATE-USER-PREFERENCES')
+        .switchMap(x => {
+            const requestBody = Object.assign({}, x.preferences);
+
+            return deps.apiClient.put(`/user-preferences/${x.userId}`, requestBody)
+                .pipe(handleHttpErrors(false)); //todo set previous state in case of error
+        })
+        .map(obj => deserialize(obj, UserPreferences))
+        .map(x => loadUserPreferencesFinished(x));

@@ -1,6 +1,7 @@
-import { User } from './user.model';
 import { Employee } from '../organization/employee.model';
 import { UserEmployeePermissions } from './user-employee-permissions.model';
+import { UserPreferences } from './user-preferences.model';
+import { User } from './user.model';
 
 export interface LoadUser {
     type: 'LOAD-USER';
@@ -29,13 +30,43 @@ export interface LoadUserEmployeePermissions {
 
 export const loadUserEmployeePermissions = (employeeId: string): LoadUserEmployeePermissions => ({ type: 'LOAD-USER-EMPLOYEE-PERMISSIONS', employeeId });
 
-export interface LoadUserEmployeePermissionsFininshed {
+export interface LoadUserEmployeePermissionsFinished {
     type: 'LOAD-USER-EMPLOYEE-PERMISSIONS-FINISHED';
     permissions: UserEmployeePermissions;
 }
 
-export const loadUserEmployeePermissionsFinished = (permissions: UserEmployeePermissions): LoadUserEmployeePermissionsFininshed => 
+export const loadUserEmployeePermissionsFinished = (permissions: UserEmployeePermissions): LoadUserEmployeePermissionsFinished =>
     ({ type: 'LOAD-USER-EMPLOYEE-PERMISSIONS-FINISHED', permissions });
 
-export type UserActions = LoadUser | LoadUserFinished | LoadUserEmployeeFinished 
-    | LoadUserEmployeePermissions | LoadUserEmployeePermissionsFininshed;
+export interface LoadUserPreferences {
+    type: 'LOAD-USER-PREFERENCES';
+    userId: string;
+}
+
+export const loadUserPreferences = (userId: string): LoadUserPreferences => ({ type: 'LOAD-USER-PREFERENCES', userId });
+
+export interface UpdateUserPreferences {
+    type: 'UPDATE-USER-PREFERENCES';
+    userId: string;
+    previousPreferences: UserPreferences;
+    preferences: UserPreferences;
+}
+
+export const updateUserPreferences = (userId: string, previousPreferences: UserPreferences, newPreferences: UserPreferences): UpdateUserPreferences => ({
+    type: 'UPDATE-USER-PREFERENCES',
+    userId: userId,
+    previousPreferences: previousPreferences,
+    preferences: newPreferences,
+});
+
+export interface LoadUserPreferencesFinished {
+    type: 'LOAD-USER-PREFERENCES-FINISHED';
+    preferences: UserPreferences;
+}
+
+export const loadUserPreferencesFinished = (preferences: UserPreferences): LoadUserPreferencesFinished =>
+    ({ type: 'LOAD-USER-PREFERENCES-FINISHED', preferences });
+
+export type UserActions = LoadUser | LoadUserFinished | LoadUserEmployeeFinished
+    | LoadUserEmployeePermissions | LoadUserEmployeePermissionsFinished
+    | LoadUserPreferences | UpdateUserPreferences | LoadUserPreferencesFinished;
