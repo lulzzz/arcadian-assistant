@@ -42,9 +42,11 @@ export const profileScreenStyles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white'
     },
-    logoutContainer: {
+    topItemsContainer: {
         marginTop: 5,
-        marginBottom: 10
+        marginBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     }
 });
 

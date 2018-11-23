@@ -15,6 +15,9 @@ import { Map } from 'immutable';
 import { CalendarEvent } from '../reducers/calendar/calendar-event.model';
 import { LogoutView } from '../navigation/logout-view';
 import { LoadingView } from '../navigation/loading';
+import tabBarStyles from '../tabbar/tab-bar-styles';
+import { ApplicationIcon } from '../override/application-icon';
+import { SettingsView } from '../user-preferences-screen/settings-view';
 
 interface ProfileScreenProps {
     employees: EmployeesStore;
@@ -71,7 +74,8 @@ class ProfileScreenImpl extends Component<ProfileScreenProps & AuthDispatchProps
 
     public render() {
         return <SafeAreaView style={profileScreenStyles.profileContainer}>
-            <View style={profileScreenStyles.logoutContainer}>
+            <View style={profileScreenStyles.topItemsContainer}>
+                <SettingsView/>
                 <LogoutView/>
             </View>
             <View style={profileScreenStyles.employeeDetailsContainer}>
