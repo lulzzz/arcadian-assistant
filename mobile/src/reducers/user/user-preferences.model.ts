@@ -9,6 +9,15 @@ export class UserPreferences {
     @required()
     public arePushNotificationsEnabled: boolean;
 
+    public clone(): UserPreferences {
+        const result = new UserPreferences();
+
+        result.areEmailNotificationsEnabled = this.areEmailNotificationsEnabled;
+        result.arePushNotificationsEnabled = this.arePushNotificationsEnabled;
+
+        return result;
+    }
+
     public equals(obj: UserPreferences): boolean {
         if (!obj) {
             return false;
