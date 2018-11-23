@@ -13,7 +13,7 @@ export class SwitchSettingsView extends Component<SwitchSettingsProps> {
 
     public render() {
         return <View style={preferencesStyles.switchSettingContainer}>
-            <StyledText style={preferencesStyles.settingTitle}>{this.props.title}</StyledText>
+            <StyledText style={preferencesStyles.switchSettingTitle}>{this.props.title}</StyledText>
             <Switch style={preferencesStyles.switchControllerContainer} onValueChange={this.props.onValueChange}
                     value={this.props.value}/>
         </View>;
